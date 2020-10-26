@@ -1,0 +1,16 @@
+title: UserClientModel
+type: object
+description: 'Model for a clients connected to a user. The UserClientModel have fields for id, name and a list of roles that the user has for the client.'
+x-tags:
+  - Users
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  roles:
+    type: array
+    items:
+      $ref: ../applications/applicationRoleModel.v1.yaml
+required:
+  - id

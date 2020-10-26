@@ -1,0 +1,13 @@
+title: UserRoleModel
+type: object
+description: The UserRoleModel have fields for id of the role and client.
+x-tags:
+  - Users
+properties:
+  roleId:
+    type: string
+  clientId:
+    type: string
+required:
+  - roleId
+  - clientId

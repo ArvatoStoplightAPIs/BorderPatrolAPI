@@ -1,0 +1,27 @@
+title: UserModel
+type: object
+description: 'Model for a user. The user contains fields for id, username, firstname, lastname, description, suspended, isAdminsitrator and a list of clients that the user has access to. '
+x-tags:
+  - Users
+properties:
+  id:
+    type: string
+  username:
+    type: string
+  firstname:
+    type: string
+  lastname:
+    type: string
+  description:
+    type: string
+  isSuspended:
+    type: boolean
+  isAdministrator:
+    type: boolean
+  clients:
+    type: array
+    items:
+      $ref: ./userClientModel.v1.yaml
+required:
+  - id
+  - username
