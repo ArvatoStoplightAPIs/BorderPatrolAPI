@@ -1,0 +1,17 @@
+title: MyProfileRoleModel
+type: object
+x-tags:
+  - MyProfile
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  permissions:
+    type: array
+    items:
+      $ref: ../permissions/permissionModel.v1.yaml
+  clients:
+    type: array
+    items:
+      $ref: ./myprofileClientModel.v1.yaml

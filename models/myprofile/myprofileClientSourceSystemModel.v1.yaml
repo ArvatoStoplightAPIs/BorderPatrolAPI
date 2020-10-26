@@ -1,0 +1,13 @@
+title: myprofileClientSourceSystemModel
+type: object
+properties:
+  sourceSystemIdentifier:
+    type: string
+  clientIdentifier:
+    type: string
+required:
+  - sourceSystemIdentifier
+  - clientIdentifier
+description: Model for a Client source system. The model contains an identifier for the source system and an identifier for a client in the source system.
+x-tags:
+  - MyProfile

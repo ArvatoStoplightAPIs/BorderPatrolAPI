@@ -1,0 +1,13 @@
+title: MyProfileClientModel
+type: object
+x-tags:
+  - MyProfile
+x-examples: {}
+description: 'Model for a client. The client includes key, name and Horizon Client id.'
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  horizonClientId:
+    type: integer

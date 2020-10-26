@@ -1,0 +1,18 @@
+title: MyProfileClientAccessModel
+type: object
+x-tags:
+  - MyProfile
+description: |-
+  Model for ProfileClientAccessModel contains id, name and horizon client id. 
+  SourceSystems are an array of ClientSourceSystemModel.
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  horizonClientId:
+    type: integer
+  sourceSystems:
+    type: array
+    items:
+      $ref: ./myprofileClientSourceSystemModel.v1.yaml
