@@ -19,9 +19,6 @@
     "/v1/permissions": {
       "get": {
         "summary": "GetMyProfilePermissions",
-        "tags": [
-          "MyProfile"
-        ],
         "responses": {
           "200": {
             "description": "OK response with myProfilePermissionResponse returned when user profile is found. If no profile is found a empty list of permissions are retuned.",
@@ -41,7 +38,10 @@
           }
         },
         "operationId": "getMyprofilePermissions",
-        "description": "Endpoint that lists the users permissions based on the Auth0 token. \nIf no profile or permissions are found, then empty list of permissions are returned."
+        "description": "Endpoint that lists the users permissions based on the Auth0 token. \nIf no profile or permissions are found, then empty list of permissions are returned.",
+        "tags": [
+          "Permissions"
+        ]
       },
       "parameters": []
     }
@@ -52,9 +52,6 @@
         "title": "GetPermissionResponse",
         "type": "object",
         "description": "Response for MyProfilePermissionResponse returns profile name and list of roles that profile has access to.\nList of roles is an array of MyProfileRoleModel.",
-        "x-tags": [
-          "Responses"
-        ],
         "properties": {
           "username": {
             "type": "string"
@@ -68,7 +65,10 @@
               "$ref": "#/components/schemas/roleModel"
             }
           }
-        }
+        },
+        "x-tags": [
+          "Permissions"
+        ]
       },
       "roleModel": {
         "title": "roleModel",
@@ -100,7 +100,10 @@
               "$ref": "#/components/schemas/clientModel"
             }
           }
-        }
+        },
+        "x-tags": [
+          "Permissions"
+        ]
       },
       "clientModel": {
         "title": "clientModel",
@@ -125,7 +128,10 @@
               "$ref": "#/components/schemas/sourceSystemModel"
             }
           }
-        }
+        },
+        "x-tags": [
+          "Permissions"
+        ]
       },
       "permissionModel": {
         "title": "permissionModel",
@@ -134,7 +140,10 @@
           "name": {
             "type": "string"
           }
-        }
+        },
+        "x-tags": [
+          "Permissions"
+        ]
       },
       "sourceSystemModel": {
         "title": "sourceSystemModel",
@@ -152,7 +161,10 @@
           "sourceSystemTypeId": {
             "type": "integer"
           }
-        }
+        },
+        "x-tags": [
+          "Permissions"
+        ]
       }
     },
     "securitySchemes": {
@@ -179,7 +191,7 @@
   ],
   "tags": [
     {
-      "name": "MyProfile"
+      "name": "Permissions"
     }
   ]
 }

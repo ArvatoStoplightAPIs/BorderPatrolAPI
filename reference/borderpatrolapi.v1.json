@@ -122,45 +122,6 @@
         "description": "This endpoint list all roles available for a given application."
       }
     },
-    "/v1/applications/{id}/configurations": {
-      "parameters": [
-        {
-          "schema": {
-            "type": "string"
-          },
-          "name": "id",
-          "in": "path",
-          "required": true
-        }
-      ],
-      "get": {
-        "summary": "ListApplicationConfigurations",
-        "tags": [
-          "Applications"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK is returned with a list of configurations for a given application.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/applicationListConfigurationResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Internal Server Error - is returned when an unhandled error occured."
-          }
-        },
-        "operationId": "listApplicationConfigurations",
-        "description": "This endpoint list all configuration settings for a given application.\nThis endpoint does not require any security header or scope.",
-        "security": []
-      }
-    },
     "/v1/roles/{id}/permissions": {
       "parameters": [
         {
