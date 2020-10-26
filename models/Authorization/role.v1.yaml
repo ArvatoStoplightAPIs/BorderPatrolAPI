@@ -1,0 +1,15 @@
+title: Role
+type: object
+properties:
+  id:
+    type: string
+    format: uuid
+  name:
+    type: string
+  roleType:
+    type: string
+    enum:
+      - client
+      - tenant
+  permissions:
+    type: string

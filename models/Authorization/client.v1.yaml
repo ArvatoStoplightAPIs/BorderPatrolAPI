@@ -1,0 +1,14 @@
+title: Client
+type: object
+properties:
+  id:
+    type: string
+    format: uuid
+  name:
+    type: string
+  horizonClientId:
+    type: string
+  sourceSystems:
+    type: array
+    items:
+      $ref: ./sourceSystem.v1.yaml
