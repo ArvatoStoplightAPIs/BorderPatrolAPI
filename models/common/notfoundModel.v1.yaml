@@ -1,0 +1,12 @@
+title: NotFoundModel
+type: object
+properties:
+  key:
+    type: string
+  username:
+    type: string
+  message:
+    type: string
+x-tags:
+  - Common
+description: 'NotFoundModel returns key, username and a error message.'
