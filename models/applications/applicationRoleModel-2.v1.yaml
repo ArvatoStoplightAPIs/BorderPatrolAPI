@@ -1,0 +1,19 @@
+title: ApplicationRoleModel
+type: object
+x-tagA:
+  - applications
+description: |-
+  Model for application roles. Each application has a set of roles.
+  ApplicationRoleModel contains the id and the name of the role.
+x-tags:
+  - Applications
+properties:
+  id:
+    type: string
+    description: String value with Identifier for an role.
+  name:
+    type: string
+    description: String value with name of the role.
+required:
+  - id
+  - name

@@ -1,0 +1,17 @@
+title: ApplicationModel
+type: object
+x-tags:
+  - Applications
+description: |-
+  Model for a application. Application is all systems that using the BorderPatrol.
+  The Application model contains the id and name of the application.
+properties:
+  id:
+    type: string
+    description: String value with Identifier for an application.
+  name:
+    type: string
+    description: String value with name of the application.
+required:
+  - id
+  - name

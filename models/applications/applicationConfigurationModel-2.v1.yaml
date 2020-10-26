@@ -1,0 +1,15 @@
+title: ApplicationConfigurationModel
+type: object
+x-tags:
+  - Applications
+description: Model for configuration settings for an application.
+properties:
+  id:
+    type: string
+    description: String value with Identifier for an configuration settings for an application.
+  value:
+    type: string
+    description: String value with value of the configuration setting.
+required:
+  - id
+  - value

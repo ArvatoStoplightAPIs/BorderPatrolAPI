@@ -1,0 +1,19 @@
+title: ApplicationRoleResponse
+type: object
+x-tags:
+  - Applications
+description: |-
+  Response for application roles containing application name and list of roles for the application.
+  List of roles is an array of ApplicationRoleModel.
+properties:
+  applicationName:
+    type: string
+    description: String value with name of the application.
+  applicationRoles:
+    type: array
+    description: List of application roles.
+    items:
+      $ref: ./applicationRoleModel.v1.yaml
+required:
+  - applicationName
+  - applicationRoles
