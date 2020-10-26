@@ -1,0 +1,201 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "BorderpatrolAuthApi",
+    "version": "1.0",
+    "description": "This is an API that requires the user to be authenticated with Auth0.\nThe API has an endpoint for myProfile that provides access to the user profile and which clients and api endpoints the user has access to.\n\nTo access myprofile, the user must have access to scopet borderpatrol-userprofile: read.\nThere is no access control for the applications and applications / configuration endpoint.\nTo access roles for an application, the user must have scoped borderpatrol applications: read",
+    "contact": {
+      "name": "Arvato Financial Solutions",
+      "url": "www.arvato.com",
+      "email": "contact@arvato.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/v1/myprofile": {
+      "get": {
+        "summary": "GetMyProfile",
+        "tags": [
+          "MyProfile"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK return when user profile is found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getMyProfileResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized is returned when accessing the endpoint without any auth token in header."
+          },
+          "404": {
+            "description": "Not Found return when profile is not found."
+          },
+          "500": {
+            "description": "Internal Server Error is returned when an unhandled error occured."
+          }
+        },
+        "operationId": "getMyProfile",
+        "description": "Endpoint that lists the users profile based on the Auth0 token."
+      }
+    },
+    "/v1/myprofile/permissions": {
+      "get": {
+        "summary": "GetMyProfilePermissions",
+        "tags": [
+          "MyProfile"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK response with myProfilePermissionResponse returned when user profile is found. If no profile is found a empty list of permissions are retuned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getMyProfilePermissionResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - is returned when accessing the endpoint without any auth token in header."
+          },
+          "500": {
+            "description": "Internal Server Error is returned when an unhandled error occured."
+          }
+        },
+        "operationId": "getMyprofilePermissions",
+        "description": "Endpoint that lists the users permissions based on the Auth0 token. \nIf no profile or permissions are found, then empty list of permissions are returned."
+      }
+    },
+    "/v1/myprofile/clients": {
+      "get": {
+        "summary": "GetMyProfileClients",
+        "tags": [
+          "MyProfile"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK response with myProfileClientResponse returned when user profile is found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getMyProfileClientResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - is returned when accessing the endpoint without any auth token in header."
+          },
+          "500": {
+            "description": "Internal Server Error is returned when an unhandled error occured."
+          }
+        },
+        "operationId": "getMyprofileClients",
+        "description": "Endpoint that lists the Client and source system information for a users Auth0 token.\nIf no profile or clients are found, then empty list of permissions are returned.\n"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "getMyProfilePermissionResponse": {
+        "title": "GetMyProfilePermissionResponse",
+        "type": "object",
+        "description": "Response for MyProfilePermissionResponse returns profile name and list of roles that profile has access to.\nList of roles is an array of MyProfileRoleModel.",
+        "properties": {
+          "profileName": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "$ref": "../models/myprofile/myprofileRoleModel.v1.yaml"
+            }
+          }
+        },
+        "x-tags": [
+          "Responses"
+        ]
+      },
+      "getMyProfileResponse": {
+        "title": "GetMyProfileResponse",
+        "type": "object",
+        "description": "MyProfileResponse returns the profile info as key, username, firstname, lastname and isActive.",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "suspended": {
+            "type": "boolean"
+          }
+        },
+        "x-tags": [
+          "Responses"
+        ]
+      },
+      "getMyProfileClientResponse": {
+        "title": "GetMyProfileClientResponse",
+        "type": "object",
+        "description": "Response for MyProfileClient returns profile name and list of clients that the user has access to. \nList of clients is an array of MyProfileClient.",
+        "properties": {
+          "profileName": {
+            "type": "string"
+          },
+          "clients": {
+            "type": "array",
+            "items": {
+              "$ref": "../models/myprofile/myprofileClientAccessModel.v1.yaml"
+            }
+          }
+        },
+        "x-tags": [
+          "Responses",
+          "MyProfile"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "Auth0": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "",
+            "refreshUrl": "",
+            "scopes": {
+              "borderpatrol-myprofile:read": "Allow to read the myprofile."
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "Auth0": [
+        "borderpatrol-myprofile:read"
+      ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "MyProfile"
+    }
+  ]
+}

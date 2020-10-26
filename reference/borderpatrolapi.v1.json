@@ -1,0 +1,695 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Borderpatrol Api",
+    "version": "1.0",
+    "description": "This is an API that requires the user to be authenticated with Auth0.\n\nThe API has an endpoint that returns information about what applications are available in BorderPatrol with associated setup data and access roles.\n\nThere is no access control for the applications and applications / configuration endpoint.\nTo access roles for an application, the user must have scoped borderpatrol applications: read\n",
+    "contact": {
+      "name": "Arvato Financial Solutions",
+      "url": "www.arvato.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/v1/clients": {
+      "get": {
+        "summary": "ListClients",
+        "tags": [
+          "Clients"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK is retuned with a GetClientResponse when request is successful. \n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/clientListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - is returned when accessing the endpoint without any auth token in header."
+          },
+          "500": {
+            "description": "Internal Server Error - is returned when an unhandled error occured."
+          }
+        },
+        "operationId": "listClients",
+        "description": "Endpoint that returns list of available clients based on the users Auth0 token.",
+        "security": [
+          {
+            "Auth0": []
+          }
+        ]
+      }
+    },
+    "/v1/applications": {
+      "get": {
+        "summary": "ListApplications",
+        "tags": [
+          "Applications"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 OK is returned with a list applications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/applicationListResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500 Internal Server Error is returned when an unhandled error occured."
+          }
+        },
+        "operationId": "listApplications",
+        "description": "This endpoint list all applications registered in Border Patrol.\nThis endpoint does not require any security header or scope.",
+        "security": []
+      }
+    },
+    "/v1/applications/{id}/roles": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "ListApplicationRoles",
+        "tags": [
+          "Applications"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK is returned with a list of roles for a given applications.\nIf application or roles are not found an empty list is returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/applicationListRoleResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized is returned when accessing the endpoint without any auth token in header."
+          },
+          "500": {
+            "description": "Internal Server Error - is returned when an unhandled error occured."
+          }
+        },
+        "operationId": "listApplicationRoles",
+        "security": [
+          {
+            "Auth0": [
+              "borderpatrol:access"
+            ]
+          }
+        ],
+        "description": "This endpoint list all roles available for a given application."
+      }
+    },
+    "/v1/applications/{id}/configurations": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "ListApplicationConfigurations",
+        "tags": [
+          "Applications"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK is returned with a list of configurations for a given application.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/applicationListConfigurationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error - is returned when an unhandled error occured."
+          }
+        },
+        "operationId": "listApplicationConfigurations",
+        "description": "This endpoint list all configuration settings for a given application.\nThis endpoint does not require any security header or scope.",
+        "security": []
+      }
+    },
+    "/v1/roles/{id}/permissions": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "ListRolePermissions",
+        "tags": [
+          "Roles"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK is returned with a RoleListPermissionResponse. \nIf role or no permissions found for the role, an empty list is returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/roleListPermissionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized - is returned when accessing the endpoint without any auth token in header."
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error - is returned when an unhandled error occured."
+          }
+        },
+        "operationId": "listRolePermissions",
+        "security": [
+          {
+            "Auth0": [
+              "borderpatrol:access"
+            ]
+          }
+        ],
+        "description": "This endpoint list all permissions for a given role.\nIf role or no permissions found for the role, an empty list is returned."
+      }
+    },
+    "/v1/users": {
+      "get": {
+        "summary": "FindUsers",
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK is returned with a UserGetResponse.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/userListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - is returned when accessing the endpoint without any auth token in header."
+          },
+          "500": {
+            "description": "Internal Server Error - is returned when an unhandled error occured."
+          }
+        },
+        "operationId": "findUsers",
+        "security": [
+          {
+            "Auth0": [
+              "borderpatrol:access"
+            ]
+          }
+        ],
+        "description": "Endpoint for listing all users. The token will restrict users for listing users that they don't have access to."
+      },
+      "post": {
+        "summary": "CreateUser",
+        "operationId": "createUser",
+        "responses": {
+          "201": {
+            "description": "Created is returned when user is successfully created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request response is returned when any of the inputdata is invalid, like incorrect email format in username."
+          },
+          "401": {
+            "description": "Unauthorized - is returned when accessing the endpoint without any auth token in header."
+          },
+          "403": {
+            "description": "Forbidden is returned if the authenticated token does not have permissions to the applicationuser:create in BorderPatrol."
+          },
+          "409": {
+            "description": "Conflict is returned when username (email) already exists."
+          },
+          "500": {
+            "description": "Internal Server Error - is returned when an unhandled error occured."
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/userCreateRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/userCreateRequest"
+              }
+            }
+          },
+          "description": "Request body for creating a user."
+        },
+        "security": [
+          {
+            "Auth0": [
+              "borderpatrol:access"
+            ]
+          },
+          {
+            "BorderPatrol": [
+              "applicationuser:create"
+            ]
+          }
+        ],
+        "description": "Endpoint for create a user. \nThe endpoint will create the user and publish a UserCreatedMessage to RabbitMQ and the user\nwil be created in Auth0 and an invite is sent on email to the created user. \n\nIf email already exists, an 409 conflict will be returned.",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/v1/users/{id}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "GetUser",
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/userGetResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized - is returned when accessing the endpoint without any auth token in header."
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error - is returned when an unhandled error occured."
+          }
+        },
+        "operationId": "getUser",
+        "description": "Endpoint for fetching a user with a given id."
+      }
+    },
+    "/v1/users/{id}/suspend": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "put": {
+        "summary": "SuspendUser",
+        "operationId": "suspendUser",
+        "responses": {
+          "200": {
+            "description": "OK response is returned with the current user data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/userGetResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request is returned if "
+          },
+          "401": {
+            "description": "Unauthorized - is returned when accessing the endpoint without any auth token in header."
+          },
+          "403": {
+            "description": "Forbidden is returned if the authenticated token does not have permissions to the applicationuser:update in BorderPatrol."
+          },
+          "404": {
+            "description": "Not Found response is returned when user is not found."
+          },
+          "500": {
+            "description": "Internal Server Error - is returned when an unhandled error occured."
+          }
+        },
+        "description": "Endpoint for suspend a user. A suspended user is not allowed to authenticate to Auth0. \nWhen suspending a user, the user is set to inactive in Border Patrol. \nBorderPatrol will publish a BorderPatrolSuspended message to RabbitMQ.\nAuth0 will block the user and Horizon will disable the user.\n\nif the user already is suspended, no update will occur, and BorderPatrolSuspended message will not be sent.",
+        "security": [
+          {
+            "Auth0": [
+              "borderpatrol:access"
+            ]
+          },
+          {
+            "BorderPatrol": [
+              "applicationuser:update"
+            ]
+          }
+        ],
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/v1/users/{id}/activate": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "put": {
+        "summary": "ActivateUser",
+        "operationId": "activateUser",
+        "responses": {
+          "200": {
+            "description": "OK response is return with a UserGetResponse when successfully activated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/userGetResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request is returned when id is invalid or the user is already active."
+          },
+          "401": {
+            "description": "Unauthorized - is returned when accessing the endpoint without any auth token in header."
+          },
+          "403": {
+            "description": "Forbidden is returned if the authenticated token does not have permissions to the applicationuser:update in BorderPatrol."
+          },
+          "404": {
+            "description": "Not Found response is returned when user is not found."
+          },
+          "500": {
+            "description": "Internal Server Error - is returned when an unhandled error occured."
+          }
+        },
+        "description": "Endpoint for activate a suspended user.\nWhen activating a user, the user is changed from inactive to active Border Patrol. \nBorderPatrol will publish a BorderPatrolActivated message to RabbitMQ.\nAuth0 will unblock the user and Horizon will enable the user.\n\nif the user already is active, no update will occur, and BorderPatrolActivated message will not be sent.",
+        "security": [
+          {
+            "Auth0": [
+              "borderpatrol:access"
+            ]
+          },
+          {
+            "BorderPatrol": [
+              "applicationuser:update"
+            ]
+          },
+          {
+            "Auth0": []
+          }
+        ],
+        "tags": [
+          "Users"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "clientListResponse": {
+        "title": "ClientListResponse",
+        "type": "object",
+        "description": "ClientListResponse is a model containing a list of clients.",
+        "properties": {
+          "clients": {
+            "type": "array",
+            "items": {
+              "$ref": "../models/clients/client.v1.yaml"
+            }
+          }
+        },
+        "x-tags": [
+          "Responses"
+        ]
+      },
+      "applicationListResponse": {
+        "title": "ApplicationListResponse",
+        "type": "object",
+        "properties": {
+          "applications": {
+            "type": "array",
+            "items": {
+              "$ref": "../models/applications/applicationModel.v1.yaml"
+            }
+          }
+        },
+        "description": "ApplicationListResponse contains a array of applications.\nThe array of applications are type of applicationModel.",
+        "x-tags": [
+          "Responses"
+        ]
+      },
+      "applicationListRoleResponse": {
+        "title": "ApplicationListRoleResponse",
+        "type": "object",
+        "properties": {
+          "applicationName": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "$ref": "../models/applications/applicationRoleModel.v1.yaml"
+            }
+          }
+        },
+        "description": "ApplicationListRoleResponse containing application name and list of roles for the application.\nList of roles is an array of ApplicationRoleModel.",
+        "x-tags": [
+          "Responses"
+        ]
+      },
+      "roleListPermissionResponse": {
+        "title": "RoleListPermissionResponse",
+        "type": "object",
+        "description": "RoleListPermissionResponse is a model for listing all permission for a given role.\nApplicationName and roleName is retuned with the list of permissions.\n",
+        "properties": {
+          "applicationName": {
+            "type": "string"
+          },
+          "roleName": {
+            "type": "string"
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "$ref": "../models/permissions/permissionModel.v1.yaml"
+            }
+          }
+        },
+        "x-tags": [
+          "Responses"
+        ]
+      },
+      "userListResponse": {
+        "title": "UserListResponse",
+        "type": "object",
+        "properties": {
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "../models/users/userModel.v1.yaml"
+            }
+          }
+        },
+        "description": "UserListResponse is model for returning a list of users. The users array is type of userModel.",
+        "x-tags": [
+          "Responses"
+        ]
+      },
+      "userGetResponse": {
+        "title": "UserGetResponse",
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "../models/users/userModel.v1.yaml"
+          }
+        },
+        "x-tags": [
+          "Responses"
+        ],
+        "description": "UserGetResponse is a model for listing a user for a given id."
+      },
+      "userCreateRequest": {
+        "title": "UserCreateRequest",
+        "type": "object",
+        "description": "UserCreateRequest model have field for creating the user.",
+        "properties": {
+          "username": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 50
+          },
+          "firstname": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "$ref": "../models/users/userRoleModel.v1.yaml"
+            }
+          }
+        },
+        "required": [
+          "username",
+          "roles"
+        ],
+        "x-tags": [
+          "Requests"
+        ]
+      },
+      "applicationListConfigurationResponse": {
+        "title": "ApplicationListConfigurationResponse",
+        "type": "object",
+        "description": "ApplicationListConfigurationResponse contains the application name a list of configurations for a application.",
+        "properties": {
+          "applicationName": {
+            "type": "string"
+          },
+          "configurations": {
+            "type": "array",
+            "items": {
+              "$ref": "../models/applications/applicationConfigurationModel.v1.yaml"
+            }
+          }
+        },
+        "x-tags": [
+          "Responses"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "Auth0": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "",
+            "refreshUrl": "",
+            "scopes": {
+              "borderpatrol:access": "Allow to access the border patrol  api."
+            }
+          }
+        }
+      },
+      "BorderPatrol": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "",
+            "refreshUrl": "",
+            "scopes": {
+              "applicationuser:update": "Allow access to update a user.",
+              "applicationuser:create": "Allow access to create a user.",
+              "applicationuser:read": "Allow access to get user information.",
+              "client:read": "Allow access to get client information.",
+              "applicationrole:read": "Allow access to get application role information.",
+              "applicationpermission:read": "Allow access to get application permission information."
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "Auth0": [
+        "borderpatrol-myprofile:read"
+      ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "Applications"
+    },
+    {
+      "name": "Roles"
+    },
+    {
+      "name": "Clients"
+    },
+    {
+      "name": "Users"
+    }
+  ]
+}
