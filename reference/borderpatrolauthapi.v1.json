@@ -28,7 +28,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/getMyProfilePermissionResponse"
+                  "$ref": "#/components/schemas/getPermissionResponse"
                 }
               }
             }
@@ -49,7 +49,7 @@
   "components": {
     "schemas": {
       "getPermissionResponse": {
-        "title": "GetMyProfilePermissionResponse",
+        "title": "GetPermissionResponse",
         "type": "object",
         "description": "Response for MyProfilePermissionResponse returns profile name and list of roles that profile has access to.\nList of roles is an array of MyProfileRoleModel.",
         "x-tags": [
@@ -65,8 +65,92 @@
           "roles": {
             "type": "array",
             "items": {
-              "$ref": "../models/Authorization/role.v1.yaml"
+              "$ref": "#/components/schemas/roleModel"
             }
+          }
+        }
+      },
+      "roleModel": {
+        "title": "roleModel",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "roleType": {
+            "type": "string",
+            "enum": [
+              "client",
+              "tenant"
+            ]
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/permissionModel"
+            }
+          },
+          "clients": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/clientModel"
+            }
+          }
+        }
+      },
+      "clientModel": {
+        "title": "clientModel",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "horizonClientId": {
+            "type": "integer"
+          },
+          "sourceSystems": {
+            "type": [
+              "string",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/components/schemas/sourceSystemModel"
+            }
+          }
+        }
+      },
+      "permissionModel": {
+        "title": "permissionModel",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "sourceSystemModel": {
+        "title": "sourceSystemModel",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "sourceSystem": {
+            "type": "string"
+          },
+          "sourceSystemType": {
+            "type": "string"
+          },
+          "sourceSystemTypeId": {
+            "type": "integer"
           }
         }
       }
