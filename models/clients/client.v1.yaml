@@ -1,0 +1,24 @@
+title: Client model
+type: object
+x-tags:
+  - Models
+  - Clients
+description: |-
+  Model for a client.
+  A client have a key and name as mandatory fields.
+properties:
+  key:
+    type: string
+  name:
+    type: string
+    maxLength: 50
+  isactive:
+    type: string
+  description:
+    type: string
+    maxLength: 255
+  isActive:
+    type: boolean
+required:
+  - key
+  - name

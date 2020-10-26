@@ -1,0 +1,13 @@
+title: ClientSourceSystemResponse model
+type: object
+description: The response after adding a sourcesystem connection to the client is the client information and a list of client source systemns including the newly added item.
+x-tags:
+  - Models
+  - Clients
+properties:
+  client:
+    $ref: ../client.v1.yaml
+  clientSourceSystems:
+    type: array
+    items:
+      $ref: ../clientSourceSystem.v1.yaml

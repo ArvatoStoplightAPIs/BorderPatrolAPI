@@ -1,0 +1,14 @@
+title: clientUserResponse model
+type: object
+x-tags:
+  - Models
+  - Clients
+properties:
+  clientKey:
+    type: string
+  '':
+    $ref: ../../users/user.v1.yaml
+  roles:
+    type: array
+    items:
+      $ref: ../../users/userClientRole.v1.yaml

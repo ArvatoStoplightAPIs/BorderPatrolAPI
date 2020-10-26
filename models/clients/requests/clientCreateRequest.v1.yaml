@@ -1,0 +1,14 @@
+title: clientCreateRequest models
+type: object
+properties:
+  name:
+    type: string
+    maxLength: 50
+  description:
+    type: string
+    maxLength: 255
+required:
+  - name
+x-tags:
+  - Models
+  - Clients

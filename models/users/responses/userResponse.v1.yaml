@@ -1,0 +1,15 @@
+title: userResponse model
+type: object
+x-tags:
+  - Models
+  - Users
+description: Model for user and tenant.
+properties:
+  user:
+    $ref: ../user.v1.yaml
+  tenant:
+    $ref: ../../tenants/tenant.v1.yaml
+  clients:
+    type: array
+    items:
+      $ref: ../../clients/client.v1.yaml

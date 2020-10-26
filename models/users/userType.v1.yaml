@@ -1,0 +1,7 @@
+title: userType
+type: object
+properties:
+  key:
+    type: string
+  name:
+    type: string

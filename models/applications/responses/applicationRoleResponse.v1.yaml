@@ -1,0 +1,12 @@
+title: applicationRoleResponse
+type: object
+x-tags:
+  - Models
+  - Applications
+properties:
+  applicationKey:
+    type: string
+  roles:
+    type: array
+    items:
+      $ref: ../role.v1.yaml

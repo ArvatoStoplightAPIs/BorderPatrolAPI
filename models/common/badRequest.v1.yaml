@@ -1,0 +1,8 @@
+title: BadRequest model
+type: object
+x-tags:
+  - Models
+  - Common
+properties:
+  '':
+    $ref: ./errorResponse.v1.yaml

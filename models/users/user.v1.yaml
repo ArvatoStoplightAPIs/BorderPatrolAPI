@@ -1,0 +1,30 @@
+title: User model
+type: object
+x-tags:
+  - Models
+  - Users
+properties:
+  key:
+    type: string
+  username:
+    type: string
+    maxLength: 50
+  firstname:
+    type: string
+    maxLength: 50
+  lastname:
+    type: string
+    maxLength: 50
+  description:
+    type: string
+    maxLength: 255
+  isactive:
+    type: boolean
+  userType:
+    $ref: ./userType.v1.yaml
+  isAdministrator:
+    type: boolean
+required:
+  - key
+  - username
+description: 'Model for a user. '

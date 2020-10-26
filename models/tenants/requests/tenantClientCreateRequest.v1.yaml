@@ -1,0 +1,13 @@
+title: tenantClientCreateRequest
+type: object
+properties:
+  clientKey:
+    type: string
+  isactive:
+    type: boolean
+required:
+  - clientKey
+x-tags:
+  - Models
+  - Tenants
+  - Clients

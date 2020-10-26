@@ -1,0 +1,975 @@
+openapi: 3.0.0
+info:
+  title: BorderPatrol Management API
+  description: |-
+    BorderPatrol Management API er et administration API for the BorderPatrol system. APIét inneholder funskjonalitet for å:
+    Opprette Tenants
+    Liste administrator brukere
+    Opprette administrator brukere
+    Opprette clienter med source systems
+    Knytte clienter til en tenant.
+    Liste Tenants med clientinformasjon og sourcesystem informasjon.
+  termsOfService: None
+  version: v1
+servers:
+  - url: 'https://borderpatrolmanagementapi-dev.horizonafs.io'
+paths:
+  /v1/clients:
+    get:
+      tags:
+        - Clients
+      operationId: Clients_GetClients
+      parameters:
+        - name: clientsNotAddedToTenant
+          in: query
+          schema:
+            type: boolean
+          x-position: 1
+          description: Parameter for listing clients not added to Tenant
+      responses:
+        '200':
+          description: 200 OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../models/clients/responses/clientResponse.v1.yaml
+        '401':
+          description: '401 Unauthorized is returned if the user is not authenticated or don´t have the fullcontrol:users scope.'
+        '500':
+          description: 500 Internal Server Error is returned when unhandled error occurs.
+      summary: List clients
+      description: Endpoint for listing all clients or clients not connected to any clients.
+      security:
+        - Auth0:
+            - 'fullcontrol:users'
+    post:
+      tags:
+        - Clients
+      operationId: Clients_CreateClient
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: ../models/clients/requests/clientCreateRequest.v1.yaml
+        required: true
+        x-position: 1
+        description: Request with client information as name and description.
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: ../models/clients/responses/clientResponse.v1.yaml
+        '400':
+          description: ''
+        '401':
+          description: '401 Unauthorized is returned if the user is not authenticated or don´t have the fullcontrol:users scope.'
+        '409':
+          description: Conflict
+        '500':
+          description: 500 Internal Server Error is returned when unhandled error occurs.
+      summary: Create a client
+      description: |-
+        Endpoint for create a client in the BorderPatrol system. The client will not be added to any tenant.
+        use the POST /v1/tenants/{tenantKey}/clients endpoint to the add the client to the tenant.
+      security:
+        - Auth0:
+            - 'fullcontrol:users'
+  '/v1/clients/{clientKey}':
+    get:
+      tags:
+        - Clients
+      operationId: Clients_GetClient
+      parameters:
+        - name: clientKey
+          in: path
+          required: true
+          schema:
+            type: string
+            format: guid
+          x-position: 1
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: ../models/clients/responses/clientResponse.v1.yaml
+        '401':
+          description: '401 Unauthorized is returned if the user is not authenticated or don´t have the fullcontrol:users scope.'
+        '404':
+          description: Not Found
+        '500':
+          description: 500 Internal Server Error is returned when unhandled error occurs.
+      summary: Get a client
+      security:
+        - Auth0:
+            - 'fullcontrol:users'
+      description: Endpoint for getting a client for a given clientKey.
+  '/v1/clients/{clientKey}/sourcesystems':
+    get:
+      tags:
+        - Clients
+      operationId: Clients_GetClientSourceSystems
+      parameters:
+        - name: clientKey
+          in: path
+          required: true
+          schema:
+            type: string
+            format: guid
+          x-position: 1
+      responses:
+        '200':
+          description: 200 OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../models/clients/responses/clientSourceSystemResponse.v1.yaml
+        '401':
+          description: '401 Unauthorized is returned if the user is not authenticated or don´t have the fullcontrol:users scope.'
+        '404':
+          description: 404 Not Found return if the client key don´t exits.
+        '500':
+          description: 500 Internal Server Error if a unhandled error occurs.
+      summary: List source systems for a client
+      security:
+        - Auth0:
+            - 'fullcontrol:users'
+      description: ''
+    post:
+      summary: Create source systems connection for a client
+      operationId: ClientsPostClientSourceSystems
+      responses:
+        '200':
+          description: 200 OK response is returned with a client information and list of client source systems.
+          content:
+            application/json:
+              schema:
+                $ref: ../models/clients/responses/clientSourceSystemResponse.v1.yaml
+        '400':
+          description: 400 Bad Request response is returned if mandatory fields in the clientSourceSystemPostRequest is null or empty.
+        '401':
+          description: '401 Unauthorized is returned if the user is not authenticated or don´t have the fullcontrol:users scope.'
+        '404':
+          description: 404 Not Found return if the client key don´t exits.
+        '409':
+          description: 409 Conflict is returned if the sourcesystem connection already exists for the client.
+        '500':
+          description: 500 Internal Server Error if a unhandled error occurs.
+      description: Endpoint for connecting a sourcesystem for a given client.
+      security:
+        - Auth0:
+            - 'fullcontrol:users'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../models/clients/requests/clientSourceSystemPostRequest.v1.yaml
+        description: 'Request for '
+      tags:
+        - Clients
+    parameters:
+      - schema:
+          type: string
+        name: clientKey
+        in: path
+        required: true
+  '/v1/clients/{clientKey}/users':
+    get:
+      tags:
+        - Clients
+      operationId: Clients_GetClientUsers
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../models/clients/responses/clientUserResponse.v1.yaml
+        '401':
+          description: '401 Unauthorized is returned if the user is not authenticated or don´t have the fullcontrol:users scope.'
+        '404':
+          description: Not Found
+        '500':
+          description: 500 Internal Server Error is returned when unhandled error occurs.
+      summary: List users for a client
+      security:
+        - Auth0:
+            - 'fullcontrol:users'
+      description: Endpoint for listing all users for a given client.
+    post:
+      tags:
+        - Clients
+      operationId: Clients_CreateClientUser
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: ../models/clients/requests/clientUserCreateRequest.v1.yaml
+        required: true
+        x-position: 2
+      responses:
+        '200':
+          description: 200 OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../models/clients/responses/clientUserResponse.v1.yaml
+        '400':
+          description: Bad Request
+        '401':
+          description: '401 Unauthorized is returned if the user is not authenticated or don´t have the fullcontrol:users scope.'
+        '404':
+          description: Not Found
+        '409':
+          description: Conflict
+        '500':
+          description: 500 Internal Server Error is returned when unhandled error occurs.
+      summary: Create a user for a client
+      security:
+        - Auth0:
+            - 'fullcontrol:users'
+      description: Endpoint for create a user for a given client.
+    parameters:
+      - schema:
+          type: string
+        name: clientKey
+        in: path
+        required: true
+  /v1/initalizations:
+    get:
+      tags:
+        - Initialization
+      operationId: Initialization_Get
+      responses:
+        '200':
+          description: 200 OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/initializations/ClientConfiguration.v1.yaml
+        '500':
+          description: 500 Internal Server Error is returned when unhandled error occurs.
+      summary: Get initalizations
+      description: Endpoint for initalization settings for the BorderPatrol frontend.
+    parameters: []
+  /v1/tenants:
+    get:
+      tags:
+        - Tenants
+      operationId: Tenants_GetTenants
+      responses:
+        '200':
+          description: 200 OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../models/tenants/responses/tenantResponse.v1.yaml
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: ../models/common/badRequest.v1.yaml
+        '401':
+          description: '401 Unauthorized is returned if the user is not authenticated or don´t have the fullcontrol:users scope.'
+        '500':
+          description: 500 Internal Server Error is returned when unhandled error occurs.
+      summary: Search tenants
+      description: |-
+        Endpoint for list all tenants or search tenants that satisfy the name parameter.
+        The endpoint returns a list of tenants.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: name
+          description: Filter tenants on name containing string.
+          required: true
+        - schema:
+            type: integer
+            default: 200
+            minimum: 0
+          in: query
+          name: maxRows
+          description: Default is 200.
+      security:
+        - Auth0:
+            - 'fullcontrol:users'
+    post:
+      tags:
+        - Tenants
+      operationId: Tenants_CreateTenant
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: ../models/tenants/requests/tenantCreateRequest.v1.yaml
+        required: true
+        x-position: 1
+        description: "Request for creating a tenant. \nMandatory fields to create a tenant:\nName, Description, TenantType, List of Applications\n"
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: ../models/tenants/responses/tenantResponse.v1.yaml
+        '400':
+          description: ''
+        '401':
+          description: Unauthorized
+        '409':
+          description: Conflict
+        '500':
+          description: 500 Internal Server Error is returned when unhandled error occurs.
+      summary: Create a tenant
+      description: 'This entry endpoint creates a tenant with name, description, tenant type and a list of applications to which the tenant is associated.'
+      security:
+        - Auth0:
+            - 'fullcontrol:users'
+  '/v1/tenants/{tenantKey}':
+    get:
+      tags:
+        - Tenants
+      operationId: Tenants_GetTenant
+      parameters:
+        - name: tenantKey
+          in: path
+          required: true
+          schema:
+            type: string
+            format: guid
+          x-position: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/tenants/responses/tenantResponse.v1.yaml
+        '401':
+          description: '401 Unauthorized is returned if the user is not authenticated or don´t have the fullcontrol:users scope.'
+        '404':
+          description: ''
+        '500':
+          description: 500 Internal Server Error is returned when unhandled error occurs.
+      summary: Get a tenant
+      description: Endpoint to get Tenant detail for a given tenant.
+      security:
+        - Auth0:
+            - 'fullcontrol:users'
+  /v1/tenants/exists:
+    head:
+      tags:
+        - Tenants
+      operationId: Tenants_TenantExists
+      parameters:
+        - name: name
+          in: query
+          schema:
+            type: string
+            nullable: true
+          x-position: 1
+      responses:
+        '204':
+          description: ''
+        '401':
+          description: '401 Unauthorized is returned if the user is not authenticated or don´t have the fullcontrol:users scope.'
+        '404':
+          description: ''
+        '500':
+          description: 500 Internal Server Error is returned when unhandled error occurs.
+      summary: Check if tenant name exists
+      security:
+        - Auth0:
+            - 'fullcontrol:users'
+      description: |-
+        Endpoint for checking if tenant name exists.
+        If tenant exists a 204 No Content is returned else a 404 Not Found is returned.
+  '/v1/tenants/{tenantKey}/clients':
+    get:
+      tags:
+        - Tenants
+      operationId: Tenants_GetTenantClients
+      parameters:
+        - name: tenantKey
+          in: path
+          required: true
+          schema:
+            type: string
+            format: guid
+          x-position: 1
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../models/tenants/responses/tenantClientResponse.v1.yaml
+        '401':
+          description: '401 Unauthorized is returned if the user is not authenticated or don´t have the fullcontrol:users scope.'
+        '404':
+          description: Not Found
+        '500':
+          description: 500 Internal Server Error is returned when unhandled error occurs.
+      summary: List clients for a Tenant
+      security:
+        - Auth0:
+            - 'fullcontrol:users'
+      description: Endpoint for listing all clients for a given tenant.
+    post:
+      tags:
+        - Tenants
+      operationId: Tenants_CreateTenantClients
+      parameters:
+        - name: tenantKey
+          in: path
+          required: true
+          schema:
+            type: string
+            format: guid
+          x-position: 1
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: ../models/tenants/requests/tenantClientCreateRequest.v1.yaml
+        required: true
+        x-position: 2
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: ../models/clients/responses/clientResponse.v1.yaml
+        '400':
+          description: ''
+        '401':
+          description: '401 Unauthorized is returned if the user is not authenticated or don´t have the fullcontrol:users scope.'
+        '404':
+          description: ''
+        '409':
+          description: Conflict
+        '500':
+          description: 500 Internal Server Error is returned when unhandled error occurs.
+      summary: Create a client for a tenant
+      security:
+        - Auth0:
+            - 'fullcontrol:users'
+      description: Endpoint for add a client to a given tenant.
+  '/v1/tenants/{tenantKey}/administrators':
+    get:
+      tags:
+        - Tenants
+      operationId: Tenants_GetTenantAdministrators
+      parameters:
+        - name: tenantKey
+          in: path
+          required: true
+          schema:
+            type: string
+            format: guid
+          x-position: 1
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../models/tenants/responses/tenantAdministratorResponse.v1.yaml
+        '401':
+          description: '401 Unauthorized is returned if the user is not authenticated or don´t have the fullcontrol:users scope.'
+        '404':
+          description: Not Found
+        '500':
+          description: 500 Internal Server Error is returned when unhandled error occurs.
+      summary: List administrators for a tenant
+      security:
+        - Auth0:
+            - 'fullcontrol:users'
+      description: Endpoint for list all administrator users for a given tenant.
+    post:
+      tags:
+        - Tenants
+      operationId: Tenants_CreateTenantAdministrator
+      parameters:
+        - name: tenantKey
+          in: path
+          required: true
+          schema:
+            type: string
+            format: guid
+          x-position: 1
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: ../models/tenants/requests/tenantAdministratorCreateRequest.v1.yaml
+        required: true
+        x-position: 2
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: ../models/tenants/responses/tenantAdministratorResponse.v1.yaml
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: ../models/common/badRequest.v1.yaml
+        '401':
+          description: '401 Unauthorized is returned if the user is not authenticated or don´t have the fullcontrol:users scope.'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: ../models/common/NotFoundResponse.v1.yaml
+        '409':
+          description: Conflict
+        '500':
+          description: 500 Internal Server Error is returned when unhandled error occurs.
+      summary: Create a administrator for a tenant
+      security:
+        - Auth0:
+            - 'fullcontrol:users'
+      description: Endpoint for add or create administrator user for a given tenant.
+  '/v1/tenants/{tenantKey}/administrators/{administratorKey}':
+    get:
+      tags:
+        - Tenants
+      operationId: Tenants_GetTenantAdministrator
+      parameters:
+        - name: tenantKey
+          in: path
+          required: true
+          schema:
+            type: string
+            format: guid
+          x-position: 1
+        - name: administratorKey
+          in: path
+          required: true
+          schema:
+            type: string
+            format: guid
+          x-position: 2
+      responses:
+        '200':
+          description: 200 OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/tenants/responses/tenantAdministratorResponse.v1.yaml
+        '401':
+          description: '401 Unauthorized is returned if the user is not authenticated or don´t have the fullcontrol:users scope.'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ../models/common/NotFoundResponse.v1.yaml
+        '500':
+          description: 500 Internal Server Error is returned when unhandled error occurs.
+        '': {}
+      summary: Get an administrator for a tenant
+      security:
+        - Auth0:
+            - 'fullcontrol:users'
+      description: Endpoint for get a administrator user for a given tenant.
+    put:
+      tags:
+        - Tenants
+      operationId: Tenants_UpdateTenantAdministrator
+      parameters:
+        - name: tenantKey
+          in: path
+          required: true
+          schema:
+            type: string
+            format: guid
+          x-position: 1
+        - name: administratorKey
+          in: path
+          required: true
+          schema:
+            type: string
+            format: guid
+          x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: ../models/tenants/requests/tenantAdministratorCreateRequest.v1.yaml
+        required: true
+        x-position: 3
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: ../models/tenants/responses/tenantAdministratorResponse.v1.yaml
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: ../models/common/badRequest.v1.yaml
+        '401':
+          description: '401 Unauthorized is returned if the user is not authenticated or don´t have the fullcontrol:users scope.'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: ../models/common/NotFoundResponse.v1.yaml
+        '500':
+          description: 500 Internal Server Error is returned when unhandled error occurs.
+      summary: Update an administrator for a tenant
+      security:
+        - Auth0:
+            - 'fullcontrol:users'
+      description: Endpoint for update a administrator user for a given tenant.
+  /v1/users:
+    get:
+      tags:
+        - Users
+      operationId: Users_GetUsers
+      responses:
+        '200':
+          description: 200 OK is returned with a list of users.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../models/users/responses/userResponse.v1.yaml
+        '401':
+          description: '401 Unauthorized is returned if the user is not authenticated or don´t have the fullcontrol:users scope.'
+        '500':
+          description: 500 Internal Server Error is returned when unhandled error occurs.
+      summary: Search users
+      security:
+        - Auth0:
+            - 'fullcontrol:users'
+      description: "Endpoint for list all users or search user that satisfies the username parameter.\nThe endpoint returns a list of users. "
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: username
+          description: Search parameter for fetching user with given username.
+  /v1/users/exists:
+    head:
+      tags:
+        - Users
+      operationId: Users_UserExists
+      parameters:
+        - name: username
+          in: query
+          schema:
+            type: string
+            nullable: true
+          x-position: 1
+          required: true
+          description: Username (email) that should be checked if exists.
+        - schema:
+            type: string
+          in: query
+          name: tenantKey
+          description: Tenant to check if username (email) exists within.
+        - schema:
+            type: string
+          in: query
+          name: clientKey
+          description: Client to check if username (email) exists within.
+      responses:
+        '204':
+          description: 204 No Content is returned when the username exists for given query parameters.
+        '401':
+          description: '401 Unauthorized is returned if the user is not authenticated or don´t have the fullcontrol:users scope.'
+        '404':
+          description: 404 Not Found is returned when the username does not exists for given query parameters.
+        '500':
+          description: 500 Internal Server Error is returned when unhandled error occurs.
+      summary: Check if username exists
+      security:
+        - Auth0:
+            - 'fullcontrol:users'
+      description: |-
+        This endpoint checks if a username exists.
+        The endpoint support 3 query parameters, username, tenantKey, clientKey.
+
+        If only the username parameter is used, it checks if username exists within all users.
+        If username and tenantKey parameters are used then it is checked if username exists within a tenant.
+        If username and clientKey parameters are used then it is checked if username exists within a tenant and client.
+
+        If username exists a 204 No Content is returned else a 404 Not Found is returned.
+        The endpoint return a head response.
+  '/v1/users/{userKey}':
+    get:
+      tags:
+        - Users
+      operationId: Users_GetUser
+      parameters:
+        - name: userKey
+          in: path
+          required: true
+          schema:
+            type: string
+            format: guid
+          x-position: 1
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: ../models/users/responses/userDetailsResponse.v1.yaml
+        '401':
+          description: '401 Unauthorized is returned if the user is not authenticated or don´t have the fullcontrol:users scope.'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: ../models/common/NotFoundResponse.v1.yaml
+        '500':
+          description: 500 Internal Server Error is returned when unhandled error occurs.
+      summary: Get a user
+      security:
+        - Auth0:
+            - 'fullcontrol:users'
+      description: Endpoint for get a user for a given user keuy.
+    put:
+      tags:
+        - Users
+      operationId: Users_UpdateUser
+      parameters:
+        - name: userKey
+          in: path
+          required: true
+          schema:
+            type: string
+            format: guid
+          x-position: 1
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: ../models/users/requests/userUpdateRequest.v1.yaml
+        required: true
+        x-position: 2
+        description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: ../models/users/responses/userDetailsResponse.v1.yaml
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: ../models/common/badRequest.v1.yaml
+        '401':
+          description: '401 Unauthorized is returned if the user is not authenticated or don´t have the fullcontrol:users scope.'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: ../models/common/NotFoundResponse.v1.yaml
+        '500':
+          description: 500 Internal Server Error is returned when unhandled error occurs.
+      summary: Update a user
+      security:
+        - Auth0:
+            - 'fullcontrol:users'
+      description: Endpoint for update a user for a given user key.
+  /v1/applications:
+    get:
+      summary: List applications
+      tags:
+        - Applications
+      responses:
+        '200':
+          description: 200 OK response is returned as list of applications.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../models/applications/application.v1.yaml
+        '401':
+          description: '401 Unauthorized is returned if the user is not authenticated or don´t have the fullcontrol:users scope.'
+        '500':
+          description: 500 Internal Server Error is returned when unhandled error occurs.
+      operationId: Applications_GetApplications
+      security:
+        - Auth0:
+            - 'fullcontrol:users'
+      requestBody: {}
+      description: Endpoint for listing all applications in BorderPatrol.
+    parameters: []
+  '/v1/applications/{applicationKey}/roles':
+    parameters:
+      - schema:
+          type: string
+        name: applicationKey
+        in: path
+        required: true
+    get:
+      summary: List roles for a application
+      tags:
+        - Applications
+        - Roles
+      responses:
+        '200':
+          description: 200 OK response is returned as list of application roles.
+          content:
+            application/json:
+              schema:
+                $ref: ../models/applications/responses/applicationRoleResponse.v1.yaml
+              examples: {}
+        '401':
+          description: '401 Unauthorized is returned if the user is not authenticated or don´t have the fullcontrol:users scope.'
+        '404':
+          description: 404 Not Found returned if application not exists.
+        '500':
+          description: 500 Internal Server Error is returned when unhandled error occurs.
+      operationId: Applications_GetApplicationRoles
+      description: List all roles for a given application.
+      security:
+        - Auth0:
+            - 'fullcontrol:users'
+  '/v1/applications/{applicationKey}/roles/{roleKey}/permissions':
+    parameters:
+      - schema:
+          type: string
+        name: applicationKey
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: roleKey
+        in: path
+        required: true
+    get:
+      summary: List permissions for a role and a application
+      tags:
+        - Applications
+        - Roles
+        - Permissions
+      responses:
+        '200':
+          description: 200 OK is returned with list of permissions for the application and role.
+          content:
+            application/json:
+              schema:
+                $ref: ../models/applications/responses/applicationPermissionResponse.v1.yaml
+        '401':
+          description: '401 Unauthorized is returned if the user is not authenticated or don´t have the fullcontrol:users scope.'
+        '404':
+          description: 404 Not Found returned if application or role not exists.
+        '500':
+          description: 500 Internal Server Error is returned when unhandled error occurs.
+      operationId: Applications_GetPermissions
+      description: List all permissions for a given application and role.
+      security:
+        - Auth0:
+            - 'fullcontrol:users'
+  /v1/applications/applicationtypes:
+    get:
+      summary: List all application types
+      tags:
+        - Applications
+      responses:
+        '200':
+          description: 200 OK response is returned with a list of application types.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../models/applications/applicationtype.v1.yaml
+        '401':
+          description: '401 Unauthorized is returned if the user is not authenticated or don´t have the fullcontrol:users scope.'
+        '500':
+          description: 500 Internal Server Error is returned when unhandled error occurs.
+      operationId: Applications_GetApplicationTypes
+      security:
+        - Auth0:
+            - 'fullcontrol:users'
+      description: List all application types in BorderPatrol
+    parameters: []
+  /v1/applications/roletype:
+    parameters: []
+    get:
+      summary: List all role types
+      tags:
+        - Applications
+        - Roles
+      responses:
+        '200':
+          description: 200 OK response is returned with a list of role types.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../models/applications/roletype.v1.yaml
+        '401':
+          description: '401 Unauthorized is returned if the user is not authenticated or don´t have the fullcontrol:users scope.'
+        '500':
+          description: 500 Internal Server Error is returned when unhandled error occurs.
+      operationId: Applications_GetRoleTypes
+      description: List all role types in BorderPatrol.
+      security:
+        - Auth0:
+            - 'fullcontrol:users'
+components:
+  schemas: {}
+  securitySchemes:
+    Auth0:
+      type: oauth2
+      openIdConnectUrl: 'https://horizonafs-identity.eu.auth0.com//.well-known/openid-configuration'
+      flows:
+        implicit:
+          authorizationUrl: 'https://horizonafs-identity.eu.auth0.com/authorize'
+          tokenUrl: 'https://horizonafs-identity.eu.auth0.com//oauth/token'
+          scopes:
+            'fullcontrol:users': 'fullcontrol:users'
+security:
+  - oauth2: []

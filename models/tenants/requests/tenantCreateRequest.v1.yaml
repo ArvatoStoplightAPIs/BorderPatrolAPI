@@ -1,0 +1,14 @@
+title: TenantCreateRequest model
+type: object
+x-tags:
+  - Models
+  - Tenants
+properties:
+  name:
+    type: string
+  description:
+    type: string
+  tenantType:
+    $ref: ../tenantType.v1.yaml
+  application:
+    $ref: ../../applications/application.v1.yaml

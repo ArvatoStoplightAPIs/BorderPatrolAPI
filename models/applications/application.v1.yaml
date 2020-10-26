@@ -1,0 +1,18 @@
+title: Application model
+type: object
+x-tags:
+  - Models
+  - Applications
+properties:
+  key:
+    type: string
+  name:
+    type: string
+  Description:
+    type: string
+  isactive:
+    type: string
+  ApplicationType:
+    $ref: ./applicationtype.v1.yaml
+required:
+  - name

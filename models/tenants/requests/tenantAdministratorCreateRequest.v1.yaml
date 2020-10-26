@@ -1,0 +1,22 @@
+title: tenantAdministratorCreateRequest
+type: object
+x-tags:
+  - Models
+  - Tenants
+properties:
+  username:
+    type: string
+    maxLength: 50
+  firstname:
+    type: string
+    maxLength: 50
+  lastname:
+    type: string
+    maxLength: 50
+  isactive:
+    type: boolean
+  description:
+    type: string
+    maxLength: 255
+required:
+  - username

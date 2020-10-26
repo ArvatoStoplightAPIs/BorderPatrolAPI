@@ -1,0 +1,10 @@
+title: tenantType
+type: object
+properties:
+  key:
+    type: string
+  name:
+    type: string
+x-tags:
+  - Models
+  - Tenants

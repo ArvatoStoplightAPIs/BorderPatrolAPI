@@ -1,0 +1,14 @@
+title: tenantResponse
+type: object
+x-tags:
+  - Models
+  - Tenants
+properties:
+  '':
+    $ref: ../tenant.v1.yaml
+  clientCount:
+    type: integer
+    format: int32
+  userCount:
+    type: integer
+    format: int32

@@ -1,0 +1,7 @@
+title: permission
+type: object
+properties:
+  key:
+    type: string
+  name:
+    type: string

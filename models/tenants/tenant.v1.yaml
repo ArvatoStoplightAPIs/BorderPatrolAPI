@@ -1,0 +1,17 @@
+title: tenant model
+type: object
+x-tags:
+  - Models
+  - Tenants
+properties:
+  key:
+    type: string
+  name:
+    type: string
+  description:
+    type: string
+  isactive:
+    type: string
+  tenantType:
+    $ref: ./tenantType.v1.yaml
+description: 'Model for a Tenant. Containing key, name, description and isActive.'

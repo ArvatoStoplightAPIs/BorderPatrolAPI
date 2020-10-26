@@ -1,0 +1,18 @@
+title: ClientSourceSystem model
+type: object
+properties:
+  sourceSystemClientIdentifier:
+    type: string
+  sourceSystemKey:
+    type: string
+required:
+  - sourceSystemClientIdentifier
+  - sourceSystemKey
+description: |-
+  ClientSourceSystem model has two mandatory fields:
+  sourceSystemClientIdentifier and sourceSystemKey.
+
+  In the Phoenix system the SourceSystemClientIdentifier is the organization number for the client. SourceSystems are the backend system.
+x-tags:
+  - Models
+  - Clients

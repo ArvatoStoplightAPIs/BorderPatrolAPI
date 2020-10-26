@@ -1,0 +1,7 @@
+title: tenantClientResponse
+type: object
+properties:
+  tenantKey:
+    type: string
+  '':
+    $ref: ../../clients/client.v1.yaml

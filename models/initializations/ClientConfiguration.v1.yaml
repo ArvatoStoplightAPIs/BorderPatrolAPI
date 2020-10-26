@@ -1,0 +1,9 @@
+title: ClientConfiguration
+type: object
+x-tags:
+  - Models
+  - Initialization
+properties:
+  auth0Settings:
+    oneOf:
+      - $ref: ./Auth0Settings.v1.yaml

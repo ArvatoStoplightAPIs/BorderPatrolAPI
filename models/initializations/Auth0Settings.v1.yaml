@@ -1,0 +1,7 @@
+title: Auth0Settings
+type: object
+properties:
+  domain:
+    type: string
+  clientId:
+    type: string

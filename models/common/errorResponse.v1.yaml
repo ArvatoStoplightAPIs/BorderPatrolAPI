@@ -1,0 +1,12 @@
+title: Error response model
+type: object
+x-tags:
+  - Models
+  - Common
+properties:
+  key:
+    type: string
+  message:
+    type: string
+  module:
+    type: string

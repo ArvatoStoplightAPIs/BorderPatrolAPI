@@ -1,0 +1,11 @@
+title: RoleType model
+type: object
+x-tags:
+  - Models
+  - Applications
+  - Roles
+properties:
+  key:
+    type: string
+  name:
+    type: string

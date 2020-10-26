@@ -1,0 +1,25 @@
+title: clientUserCreateRequest
+type: object
+properties:
+  username:
+    type: string
+    maxLength: 50
+  firstname:
+    type: string
+    maxLength: 50
+  lastname:
+    type: string
+    maxLength: 50
+  description:
+    type: string
+    maxLength: 255
+  isactive:
+    type: boolean
+  userType:
+    $ref: ../../users/userType.v1.yaml
+  roles:
+    type: array
+    items:
+      $ref: ../../users/userClientRole.v1.yaml
+required:
+  - username

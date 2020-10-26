@@ -1,0 +1,11 @@
+title: applicationPermissionResponse
+type: object
+properties:
+  applicationKey:
+    type: string
+  roleKey:
+    type: string
+  permissions:
+    type: array
+    items:
+      $ref: ../permission.v1.yaml

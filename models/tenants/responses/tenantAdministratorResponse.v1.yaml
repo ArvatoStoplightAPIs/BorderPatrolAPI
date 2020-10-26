@@ -1,0 +1,18 @@
+title: tenantAdministratorResponse model
+type: object
+properties:
+  tenantKey:
+    type: string
+  administratorKey:
+    type: string
+  username:
+    type: string
+  firstname:
+    type: string
+  lastname:
+    type: string
+  isactive:
+    type: boolean
+x-tags:
+  - Models
+  - Tenants

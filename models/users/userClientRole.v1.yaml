@@ -1,0 +1,15 @@
+title: userClientRole model
+type: object
+properties:
+  client:
+    $ref: ../clients/client.v1.yaml
+  role:
+    $ref: ../applications/role.v1.yaml
+required:
+  - client
+  - role
+x-tags:
+  - Models
+  - Users
+  - Clients
+  - Roles

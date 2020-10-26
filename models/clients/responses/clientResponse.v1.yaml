@@ -1,0 +1,5 @@
+title: clientResponse
+type: object
+properties:
+  '':
+    $ref: ../client.v1.yaml

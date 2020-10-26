@@ -1,0 +1,18 @@
+title: userUpdateRequest
+type: object
+x-tags:
+  - Models
+  - Users
+properties:
+  username:
+    type: string
+  firstname:
+    type: string
+  lastname:
+    type: string
+  description:
+    type: string
+  isactive:
+    type: string
+  userType:
+    $ref: ../userType.v1.yaml

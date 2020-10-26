@@ -1,0 +1,9 @@
+title: userDetailsResponse
+type: object
+properties:
+  '':
+    $ref: ./userResponse.v1.yaml
+  roles:
+    type: array
+    items:
+      $ref: ../userClientRole.v1.yaml

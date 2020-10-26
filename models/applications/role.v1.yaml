@@ -1,0 +1,14 @@
+title: Role model
+type: object
+properties:
+  key:
+    type: string
+  name:
+    type: string
+  description:
+    type: string
+  isactive:
+    type: string
+  roleType:
+    $ref: ./roletype.v1.yaml
+description: ''
