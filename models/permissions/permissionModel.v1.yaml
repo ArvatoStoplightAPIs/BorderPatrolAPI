@@ -1,0 +1,8 @@
+title: PermissionModel
+type: object
+description: PermissionModel return a id and name of permission.
+x-tags:
+  - Roles
+properties:
+  name:
+    type: string
